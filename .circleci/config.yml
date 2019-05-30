@@ -1,0 +1,46 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    working_directory: ~/repo
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            - v1-dependencies-
+      - run: gradle dependencies
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run: gradle build
+      - persist_to_workspace:
+          root: .
+          paths: build/libs/
+
+  deploy:
+    docker:
+      - image: circleci/python:2.7
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: sudo pip install awscli
+      - run: |
+          aws s3 cp ~/repo/build/libs/*.jar s3://elasticbeanstalk-ap-southeast-1-453030339737/auction.jar --region ap-southeast-1
+          aws elasticbeanstalk create-application-version --application-name PRC391 --version-label ${CIRCLE_SHA1} --source-bundle S3Bucket="elasticbeanstalk-ap-southeast-1-453030339737",S3Key="auction.jar" --auto-create-application --region ap-southeast-1
+          aws elasticbeanstalk update-environment --application-name PRC391 --environment-name Prc391-env --version-label ${CIRCLE_SHA1} --region ap-southeast-1
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
