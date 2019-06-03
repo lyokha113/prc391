@@ -5,12 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreateAccountRequest {
+@NoArgsConstructor
+public class ApiResponse <T> {
 
-    private String fullName;
-    private String email;
-    private String password;
+    private Boolean success;
+    private T data;
 
 }

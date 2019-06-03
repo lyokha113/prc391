@@ -2,7 +2,7 @@ package com.cloud.auction.constant;
 
 import java.util.Arrays;
 
-public enum Role {
+public enum RoleEnum {
 
     ADMINISTRATOR(1), CUSTOMER(2);
 
@@ -12,12 +12,12 @@ public enum Role {
         return id;
     }
 
-    Role(int id) {
+    RoleEnum(int id) {
         this.id = id;
     }
 
-    public static Role getRoleId(int id) {
-        return Arrays.stream(Role.values()).filter(roleId -> roleId.getId() == id)
+    public static RoleEnum getRoleId(int id) {
+        return Arrays.stream(RoleEnum.values()).filter(roleId -> roleId.getId() == id)
                 .findFirst().orElse(null);
     }
 }

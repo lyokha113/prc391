@@ -1,19 +1,19 @@
-package com.sgdg.auction.entity;
+package com.cloud.auction.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "user_role")
+@Table(name = "role")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRole {
+public class Role {
 
     @Id
     @Column
@@ -24,6 +24,6 @@ public class UserRole {
     private String name;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<User> users;
+    private List<Account> accounts;
 
 }
