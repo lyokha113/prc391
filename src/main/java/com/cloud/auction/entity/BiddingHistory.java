@@ -33,7 +33,7 @@ public class BiddingHistory {
 
     @Column
     @NotNull
-    private Long money;
+    private Long price;
 
     @Column(columnDefinition = "timestamp default current_timestamp")
     @NotNull
@@ -49,7 +49,7 @@ public class BiddingHistory {
                 "id=" + id +
                 ", account=" + account +
                 ", bidding=" + bidding +
-                ", money=" + money +
+                ", price=" + price +
                 ", date=" + date +
                 ", status=" + status +
                 '}';

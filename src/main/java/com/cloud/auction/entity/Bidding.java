@@ -1,6 +1,8 @@
 package com.cloud.auction.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,15 +19,17 @@ import java.util.List;
 @Table(name = "bidding")
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Bidding {
 
     @Id
-    @NotBlank
-    private String orderCode;
+    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
 
     @Column
     @NotNull
-    private Long maxMoney;
+    private Long currentPrice;
 
     @Column
     @NotNull
@@ -53,8 +57,8 @@ public class Bidding {
     @Override
     public String toString() {
         return "Bidding{" +
-                "orderCode='" + orderCode + '\'' +
-                ", maxMoney=" + maxMoney +
+                "id='" + id + '\'' +
+                ", currentPrice=" + currentPrice +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", expired=" + expired +
