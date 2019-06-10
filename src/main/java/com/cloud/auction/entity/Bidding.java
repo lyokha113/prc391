@@ -34,15 +34,14 @@ public class Bidding {
     @NotNull
     private LocalDateTime startTime;
 
-    @Column(columnDefinition = "timestamp default current_timestamp")
     @NotNull
     private LocalDateTime endTime;
 
-    @Column
+    @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
     @NotNull
     private Boolean expired;
 
-    @Column
+    @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
     @NotNull
     private Boolean finished;
 

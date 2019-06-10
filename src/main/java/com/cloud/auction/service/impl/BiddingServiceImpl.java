@@ -30,7 +30,7 @@ public class BiddingServiceImpl implements BiddingService {
 
         products.forEach(product -> result.addAll(
                 product.getBids().stream()
-                        .filter(bid -> bid.getEndTime().isBefore(LocalDateTime.now()))
+                        .filter(bid -> bid.getEndTime().isAfter(LocalDateTime.now()))
                         .collect(Collectors.toList())
         ));
 
