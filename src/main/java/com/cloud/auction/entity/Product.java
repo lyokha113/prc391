@@ -37,11 +37,7 @@ public class Product {
     @Column(columnDefinition = "longtext")
     private String description;
 
-    @Column
-    @NonNull
-    private LocalDateTime createdTime;
-
-    @Column
+    @Column(columnDefinition = "TINYINT(1) default 1", nullable = false)
     @NonNull
     private Boolean active;
 
@@ -63,7 +59,6 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
-                ", createdTime=" + createdTime +
                 ", active=" + active +
                 '}';
     }

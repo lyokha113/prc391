@@ -24,18 +24,17 @@ public class Bidding {
 
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column
     @NotNull
     private Long currentPrice;
 
-    @Column
+    @Column(columnDefinition = "timestamp default current_timestamp")
     @NotNull
     private LocalDateTime startTime;
 
-    @Column
+    @Column(columnDefinition = "timestamp default current_timestamp")
     @NotNull
     private LocalDateTime endTime;
 

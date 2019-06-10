@@ -50,7 +50,7 @@ public class Account {
     @NotBlank
     private String password;
 
-    @Column
+    @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
     @NotNull
     private Boolean active;
 
