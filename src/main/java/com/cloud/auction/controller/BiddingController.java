@@ -3,6 +3,7 @@ package com.cloud.auction.controller;
 import com.cloud.auction.entity.Account;
 import com.cloud.auction.entity.Bidding;
 import com.cloud.auction.entity.Product;
+import com.cloud.auction.model.UserPrincipal;
 import com.cloud.auction.payload.ApiResponse;
 import com.cloud.auction.payload.BidRequest;
 import com.cloud.auction.payload.BiddingResponse;
@@ -10,10 +11,13 @@ import com.cloud.auction.service.AccountService;
 import com.cloud.auction.service.BiddingService;
 import com.cloud.auction.service.FireStoreService;
 import com.cloud.auction.service.ProductService;
+import com.cloud.auction.service.impl.FireStoreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,15 +28,12 @@ import java.util.UUID;
 public class BiddingController {
 
     @Autowired
-    private AccountService accountService;
-
-    @Autowired
     private BiddingService biddingService;
 
     @Autowired
     private ProductService productService;
 
-    private FireStoreService fireStoreService;
+    private FireStoreService fireStoreService = new FireStoreServiceImpl();
 
     @GetMapping("/bids")
     private ResponseEntity<?> getAllBidding() {
@@ -57,11 +58,10 @@ public class BiddingController {
     }
 
     @PostMapping("/bid/")
-    private ResponseEntity<?> bid(@RequestBody BidRequest bidRequest) {
-        Optional<Account> account = accountService.getAccountById(UUID.fromString(bidRequest.getAccountId()));
-        if (!account.isPresent()) return ResponseEntity.ok(new ApiResponse<>(false, "account not found"));
+    private ResponseEntity<?> bid(@RequestBody BidRequest bidRequest, Authentication auth) {
+        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
 
-        boolean result = fireStoreService.insertBidding(account.get(), bidRequest.getBidId(), bidRequest.getMoney());
-        return ResponseEntity.ok(new ApiResponse<>(result, result ? "failed" : "done"));
+        fireStoreService.insertBidding(principal.getId().toString(), principal.getFullName(), bidRequest.getBidId(), bidRequest.getPrice());
+        return ResponseEntity.ok(new ApiResponse<>(true, "done"));
     }
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BidRequest {
 
-    private String accountId;
     private String bidId;
-    private Long money;
+    private Long price;
 }
