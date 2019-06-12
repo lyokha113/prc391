@@ -35,15 +35,15 @@ public class BiddingController {
 
     private FireStoreService fireStoreService = new FireStoreServiceImpl();
 
-    @GetMapping("/bids")
-    private ResponseEntity<?> getAllBidding() {
+    @GetMapping("/bid")
+    private ResponseEntity<ApiResponse> getAllBidding() {
         List<Product> products = productService.getAllProduct();
         List<Bidding> bids = biddingService.getCurrentBids(products);
         return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
     }
 
     @GetMapping("/bid/{id}")
-    private ResponseEntity<?> getBiding(@PathVariable("id") String id) {
+    private ResponseEntity<ApiResponse> getBiding(@PathVariable("id") String id) {
         Optional<Bidding> result = biddingService.getBiddingById(id);
         if (result.isPresent()) {
             Bidding bid = result.get();
@@ -57,8 +57,8 @@ public class BiddingController {
         return ResponseEntity.ok(new ApiResponse<>(true, "empty"));
     }
 
-    @PostMapping("/bid/")
-    private ResponseEntity<?> bid(@RequestBody BidRequest bidRequest, Authentication auth) {
+    @PostMapping("/bid")
+    private ResponseEntity<ApiResponse> bid(@RequestBody BidRequest bidRequest, Authentication auth) {
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
 
         fireStoreService.insertBidding(principal.getId().toString(), principal.getFullName(), bidRequest.getBidId(), bidRequest.getPrice());

@@ -26,7 +26,7 @@ public class AccountController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> createAccount(@Valid @RequestBody CreateAccountRequest request) {
+    public ResponseEntity<ApiResponse> createAccount(@Valid @RequestBody CreateAccountRequest request) {
 
         try {
             Account account = new Account(request);
