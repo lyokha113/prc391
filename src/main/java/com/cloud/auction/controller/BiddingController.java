@@ -42,6 +42,13 @@ public class BiddingController {
         return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
     }
 
+    @GetMapping("/bid/cate/{id}")
+    private ResponseEntity<ApiResponse> getAllBiddingByCategory(@PathVariable("id") Integer categoryId) {
+        List<Product> products = productService.getAllProductByCategory(categoryId);
+        List<Bidding> bids = biddingService.getCurrentBids(products);
+        return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
+    }
+
     @GetMapping("/bid/{id}")
     private ResponseEntity<ApiResponse> getBiding(@PathVariable("id") String id) {
         Optional<Bidding> result = biddingService.getBiddingById(id);

@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface ProductService {
     List<Product> getAllProduct();
+    List<Product> getAllProductByCategory(Integer id);
 }
