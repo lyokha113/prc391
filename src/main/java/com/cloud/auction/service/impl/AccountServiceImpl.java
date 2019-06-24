@@ -6,6 +6,7 @@ import com.cloud.auction.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +24,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Optional<Account> getAccountById(UUID uuid) {
         return accountRepository.findById(uuid);
+    }
+
+    @Override
+    public List<Account> getAllAccount() {
+        return accountRepository.findAll();
     }
 
     @Override

@@ -4,20 +4,21 @@ import java.util.Arrays;
 
 public enum RoleEnum {
 
-    ADMINISTRATOR(1), CUSTOMER(2);
+    ADMINISTRATOR(1, "ROLE_ADMINISTRATOR"), CUSTOMER(2, "ROLE_CUSTOMER");
 
     private int id;
+    private String name;
 
     public int getId() {
         return id;
     }
 
-    RoleEnum(int id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
 
-    public static RoleEnum getRoleId(int id) {
-        return Arrays.stream(RoleEnum.values()).filter(roleId -> roleId.getId() == id)
-                .findFirst().orElse(null);
+    RoleEnum(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

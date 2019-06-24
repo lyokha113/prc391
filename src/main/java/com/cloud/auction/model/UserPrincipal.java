@@ -26,7 +26,7 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private List<GrantedAuthority> authorities;
 
     public static UserPrincipal create(Account account) {
 
@@ -44,7 +44,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<GrantedAuthority>  getAuthorities() {
         return authorities;
     }
 
