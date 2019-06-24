@@ -47,6 +47,7 @@ public class Bidding {
 
     @ManyToOne
     @NotNull
+    @JsonIgnore
     private Product product;
 
     @OneToMany(mappedBy = "bidding", cascade = CascadeType.ALL, orphanRemoval = true)

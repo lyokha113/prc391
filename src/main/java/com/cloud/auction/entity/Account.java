@@ -3,6 +3,7 @@ package com.cloud.auction.entity;
 import com.cloud.auction.constant.RoleEnum;
 import com.cloud.auction.payload.CreateAccountRequest;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,14 +22,11 @@ import java.util.UUID;
 @Table(name = "account")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Account {
 
     public Account(CreateAccountRequest request) {
-
         Role role = new Role();
         role.setId(RoleEnum.CUSTOMER.getId());
-
         this.fullName = request.getFullName();
         this.email = request.getEmail();
         this.role = role;
@@ -66,6 +64,7 @@ public class Account {
 
     @ManyToOne
     @NotNull
+    @JsonIgnore
     private Role role;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
