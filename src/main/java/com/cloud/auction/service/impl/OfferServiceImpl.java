@@ -3,7 +3,7 @@ package com.cloud.auction.service.impl;
 import com.cloud.auction.exception.AppException;
 import com.cloud.auction.model.Account;
 import com.cloud.auction.model.Bidding;
-import com.cloud.auction.payload.BidRequest;
+import com.cloud.auction.payload.OfferRequest;
 import com.cloud.auction.service.OfferService;
 import com.cloud.auction.service.BiddingService;
 import com.cloud.auction.service.FirebaseService;
@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BiddingHistoryServiceImpl implements OfferService {
+public class OfferServiceImpl implements OfferService {
 
     @Autowired
-    private OfferService biddingHistoryService;
+    private OfferService offerService;
 
     @Autowired
     private BiddingService biddingService;
@@ -23,8 +23,8 @@ public class BiddingHistoryServiceImpl implements OfferService {
     private FirebaseService firebaseService;
 
     @Override
-    public void bid(Account account, BidRequest request) {
-        Bidding bidding = biddingService.getBidding(request.getBidId());
+    public void bid(Account account, OfferRequest request) {
+        Bidding bidding = biddingService.getBidding(request.getBiddingId());
         if (bidding != null) {
             Account winner = bidding.getWinner();
             if (winner.getId().equals(account.getId())) {
@@ -37,12 +37,9 @@ public class BiddingHistoryServiceImpl implements OfferService {
             }
 
             firebaseService.insertBidding(account.getId(), account.getFullName(),
-                    request.getBidId(), request.getMoney());
+                    request.getBiddingId(), request.getMoney());
 
-            bidding.setWinner(account);
-            bidding.setCurrentPrice(request.getMoney());
-            biddingService.updateBidding(bidding);
-
+            biddingService.updateWinner(account, request.getMoney(), bidding);
         } else {
             throw new AppException("bidding not found");
         }
