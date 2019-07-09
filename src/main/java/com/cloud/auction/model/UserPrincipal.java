@@ -1,14 +1,11 @@
 package com.cloud.auction.model;
 
-import com.cloud.auction.entity.Account;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,7 +20,6 @@ public class UserPrincipal implements UserDetails {
     private String email;
     private Boolean active;
 
-    @JsonIgnore
     private String password;
 
     private List<GrantedAuthority> authorities;

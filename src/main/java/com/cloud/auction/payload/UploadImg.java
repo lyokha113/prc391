@@ -5,10 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class BidRequest {
-
-    private String bidId;
-    private Long price;
+@AllArgsConstructor
+public class UploadImg {
+    String content;
+    String contentType;
 }

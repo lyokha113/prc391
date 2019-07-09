@@ -1,23 +1,21 @@
-package com.cloud.auction.entity;
+package com.cloud.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Entity
+@Builder
 @Data
 @Table(name = "product_image")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ProductImage {
 
     @Id
@@ -29,9 +27,9 @@ public class ProductImage {
     @NotBlank
     private String image;
 
+    @JsonIgnore
     @ManyToOne
     @NotNull
-    @JsonIgnore
     private Product product;
 
     @Override

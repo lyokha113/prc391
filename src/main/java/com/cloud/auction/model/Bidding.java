@@ -1,25 +1,22 @@
-package com.cloud.auction.entity;
+package com.cloud.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Builder
 @Data
 @Table(name = "bidding")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Bidding {
 
     @Id
@@ -31,14 +28,12 @@ public class Bidding {
     private Long currentPrice;
 
     @Column(columnDefinition = "timestamp default current_timestamp")
-    @NotNull
     private LocalDateTime startTime;
 
     @NotNull
     private LocalDateTime endTime;
 
     @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
-    @NotNull
     private Boolean expired;
 
     @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
@@ -47,11 +42,14 @@ public class Bidding {
 
     @ManyToOne
     @NotNull
-    @JsonIgnore
     private Product product;
 
+    @ManyToOne
+    private Account winner;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "bidding", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BiddingHistory> biddingHistories;
+    private List<Offer> offers;
 
     @Override
     public String toString() {

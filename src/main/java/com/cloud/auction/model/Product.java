@@ -1,24 +1,18 @@
-package com.cloud.auction.entity;
+package com.cloud.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Builder
 @Data
 @Table(name = "product")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Product {
 
     @Id
@@ -41,14 +35,15 @@ public class Product {
     @NonNull
     private Boolean active;
 
+    @JsonIgnore
     @ManyToOne
     @NonNull
-    @JsonIgnore
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bidding> bids;
 

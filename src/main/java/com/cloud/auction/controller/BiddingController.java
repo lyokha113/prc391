@@ -1,27 +1,23 @@
 package com.cloud.auction.controller;
 
-import com.cloud.auction.entity.Account;
-import com.cloud.auction.entity.Bidding;
-import com.cloud.auction.entity.Product;
+import com.cloud.auction.exception.AppException;
+import com.cloud.auction.model.Bidding;
+import com.cloud.auction.model.Product;
 import com.cloud.auction.model.UserPrincipal;
 import com.cloud.auction.payload.ApiResponse;
-import com.cloud.auction.payload.BidRequest;
-import com.cloud.auction.payload.BiddingResponse;
+import com.cloud.auction.payload.BiddingRequest;
+import com.cloud.auction.payload.ProductRequest;
 import com.cloud.auction.service.AccountService;
+import com.cloud.auction.service.OfferService;
 import com.cloud.auction.service.BiddingService;
-import com.cloud.auction.service.FireStoreService;
 import com.cloud.auction.service.ProductService;
-import com.cloud.auction.service.impl.FireStoreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 
@@ -31,44 +27,68 @@ public class BiddingController {
     private BiddingService biddingService;
 
     @Autowired
+    private OfferService biddingHistoryService;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
     private ProductService productService;
 
-    private FireStoreService fireStoreService = new FireStoreServiceImpl();
-
-    @GetMapping("/bid")
-    private ResponseEntity<ApiResponse> getAllBidding() {
-        List<Product> products = productService.getAllProduct();
+    @GetMapping("/bidding")
+    private ResponseEntity<ApiResponse> getBids() {
+        List<Product> products = productService.getActiveProducts();
         List<Bidding> bids = biddingService.getCurrentBids(products);
         return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
     }
 
-    @GetMapping("/bid/cate/{id}")
+    @GetMapping("/bidding/cate/{id}")
     private ResponseEntity<ApiResponse> getAllBiddingByCategory(@PathVariable("id") Integer categoryId) {
-        List<Product> products = productService.getAllProductByCategory(categoryId);
+        List<Product> products = productService.getProductsByCategory(categoryId);
         List<Bidding> bids = biddingService.getCurrentBids(products);
         return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
     }
 
-    @GetMapping("/bid/{id}")
+    @GetMapping("/bidding/user/current")
+    private ResponseEntity<ApiResponse> getCurrentBidsOfUser(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        List<Bidding> bids = biddingService.getCurrentBidsOfUser(userPrincipal.getId());
+        return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
+    }
+
+    @GetMapping("/bidding/user/finished")
+    private ResponseEntity<ApiResponse> getFinishedBidsOfUser(Authentication authentication) {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        List<Bidding> bids = biddingService.getFinishedBidsOfUser(userPrincipal.getId());
+        return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
+    }
+
+    @GetMapping("/bidding/{id}")
     private ResponseEntity<ApiResponse> getBiding(@PathVariable("id") String id) {
-        Optional<Bidding> result = biddingService.getBiddingById(id);
-        if (result.isPresent()) {
-            Bidding bid = result.get();
-            List<Long> bidPrices = new ArrayList<>();
-            for (int i = 1; i < 10; i++) {
-                bidPrices.add(bid.getCurrentPrice() + (50000 * i));
-            }
-
-            return ResponseEntity.ok(new ApiResponse<>(true, new BiddingResponse(bid, bidPrices)));
+        Bidding bidding = biddingService.getBidding(id);
+        if (bidding != null) {
+            return ResponseEntity.ok(new ApiResponse<>(true, bidding));
         }
-        return ResponseEntity.ok(new ApiResponse<>(true, "empty"));
+        return ResponseEntity.ok(new ApiResponse<>(false, "bidding not found"));
     }
 
-    @PostMapping("/bid")
-    private ResponseEntity<ApiResponse> bid(@RequestBody BidRequest bidRequest, Authentication auth) {
-        UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-
-        fireStoreService.insertBidding(principal.getId().toString(), principal.getFullName(), bidRequest.getBidId(), bidRequest.getPrice());
-        return ResponseEntity.ok(new ApiResponse<>(true, "done"));
+    @PostMapping("/bidding")
+    private ResponseEntity<ApiResponse> createBidding(@Valid @RequestBody BiddingRequest request) {
+        biddingService.createBidding(request);
+        return ResponseEntity.ok(new ApiResponse<>(true, "created successfully"));
     }
+
+
+    @PutMapping("/bidding/{id}")
+    private ResponseEntity<ApiResponse> updateBidding(@PathVariable("id") String id,
+                                                      @Valid @RequestBody BiddingRequest request) {
+        try {
+            biddingService.updateBidding(id, request);
+            return ResponseEntity.ok(new ApiResponse<>(true, "updated successfully"));
+        } catch (AppException ex) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, ex.getMessage()));
+        }
+    }
+
+
 }

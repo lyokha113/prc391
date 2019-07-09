@@ -1,12 +1,17 @@
 package com.cloud.auction.component;
 
+import com.cloud.auction.model.Account;
 import com.cloud.auction.model.UserPrincipal;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,28 +26,26 @@ public class JwtTokenProvider {
     @Value("${app.jwtExpirationInMs}")
     private int jwtExpirationInMs;
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(Account account) throws JsonProcessingException {
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
+        ObjectMapper om = new ObjectMapper();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getId().toString())
+                .setSubject(om.writeValueAsString(account))
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public UUID getUserIdFromJWT(String token) {
+    public Account getTokenValue(String token) throws IOException {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-
-        return UUID.fromString(claims.getSubject());
+        return new ObjectMapper().readValue(claims.getSubject(), Account.class);
     }
 
     public boolean validateToken(String authToken) {

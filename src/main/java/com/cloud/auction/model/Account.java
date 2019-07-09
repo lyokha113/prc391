@@ -1,11 +1,9 @@
-package com.cloud.auction.entity;
+package com.cloud.auction.model;
 
-import com.cloud.auction.constant.RoleEnum;
-import com.cloud.auction.payload.CreateAccountRequest;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.cloud.auction.payload.RegisterRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -15,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -23,15 +22,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
-
-    public Account(CreateAccountRequest request) {
-        Role role = new Role();
-        role.setId(RoleEnum.CUSTOMER.getId());
-        this.fullName = request.getFullName();
-        this.email = request.getEmail();
-        this.role = role;
-        this.active = true;
-    }
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -45,7 +35,7 @@ public class Account {
     private String email;
 
     @Column
-    @NotBlank
+    @JsonIgnore
     private String password;
 
     @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
@@ -64,22 +54,38 @@ public class Account {
 
     @ManyToOne
     @NotNull
-    @JsonIgnore
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BiddingHistory> biddingHistories;
+    private List<Offer> offers;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "winner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bidding> winningBiddings;
 
     @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", active=" + active +
                 ", fullName='" + fullName + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(id, account.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

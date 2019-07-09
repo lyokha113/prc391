@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class CreateAccountRequest {
+@NoArgsConstructor
+public class BiddingRequest {
 
-    private String fullName;
-    private String email;
-    private String password;
-
+    private Integer productId;
+    private Integer duration;
+    private Long price;
 }

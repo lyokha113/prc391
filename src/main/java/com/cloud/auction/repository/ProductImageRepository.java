@@ -1,7 +1,6 @@
 package com.cloud.auction.repository;
 
-import com.cloud.auction.entity.Product;
-import com.cloud.auction.entity.ProductImage;
+import com.cloud.auction.model.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum RoleEnum {
 
-    ADMINISTRATOR(1, "ROLE_ADMINISTRATOR"), CUSTOMER(2, "ROLE_CUSTOMER");
+    ADMINISTRATOR(1, "ADMINISTRATOR"), CUSTOMER(2, "CUSTOMER");
 
     private int id;
     private String name;

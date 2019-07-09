@@ -1,13 +1,15 @@
 package com.cloud.auction.service;
 
-import com.cloud.auction.entity.Account;
-import com.cloud.auction.entity.Product;
+import com.cloud.auction.model.Product;
+import com.cloud.auction.payload.ProductRequest;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public interface ProductService {
-    List<Product> getAllProduct();
-    List<Product> getAllProductByCategory(Integer id);
+    Product getProduct(Integer id);
+    List<Product> getProducts();
+    List<Product> getActiveProducts();
+    List<Product> getProductsByCategory(Integer id);
+    void updateProduct(Integer id, ProductRequest request);
+    void createProduct(ProductRequest request);
 }

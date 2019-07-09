@@ -1,9 +1,7 @@
-package com.cloud.auction.entity;
+package com.cloud.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,12 +10,12 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Data
-@Table(name = "bidding_history")
+@Table(name = "offer")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class BiddingHistory {
+public class Offer {
 
     @Id
     @Column
@@ -26,7 +24,6 @@ public class BiddingHistory {
 
     @ManyToOne
     @NotNull
-    @JsonIgnore
     private Account account;
 
     @ManyToOne
@@ -47,7 +44,7 @@ public class BiddingHistory {
 
     @Override
     public String toString() {
-        return "BiddingHistory{" +
+        return "Offer{" +
                 "id=" + id +
                 ", account=" + account +
                 ", bidding=" + bidding +

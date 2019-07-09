@@ -1,21 +1,20 @@
-package com.cloud.auction.entity;
+package com.cloud.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Builder
 @Data
 @Table(name = "role")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Role {
 
     @Id
@@ -26,6 +25,7 @@ public class Role {
     @Column
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts;
 

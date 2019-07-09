@@ -1,8 +1,8 @@
-package com.cloud.auction.entity;
+package com.cloud.auction.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,11 +11,11 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity
+@Builder
 @Data
 @Table(name = "category")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Category {
 
     @Id
@@ -27,9 +27,7 @@ public class Category {
     @NotBlank
     private String name;
 
-    @Column
-    private String icon;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
@@ -38,7 +36,6 @@ public class Category {
         return "Category{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", icon='" + icon + '\'' +
                 '}';
     }
 }

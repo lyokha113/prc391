@@ -1,16 +1,24 @@
 package com.cloud.auction.service.impl;
 
-import com.cloud.auction.entity.Bidding;
-import com.cloud.auction.entity.Product;
+import com.cloud.auction.exception.AppException;
+import com.cloud.auction.model.Account;
+import com.cloud.auction.model.Bidding;
+import com.cloud.auction.model.Offer;
+import com.cloud.auction.model.Product;
+import com.cloud.auction.payload.BiddingRequest;
 import com.cloud.auction.repository.BiddingRepository;
+import com.cloud.auction.service.AccountService;
 import com.cloud.auction.service.BiddingService;
+import com.cloud.auction.service.ProductService;
+import com.cloud.auction.utils.BiddingUtils;
+import com.cloud.auction.utils.StreamUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,21 +27,95 @@ public class BiddingServiceImpl implements BiddingService {
     @Autowired
     private BiddingRepository biddingRepository;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private AccountService accountService;
+
     @Override
-    public Optional<Bidding> getBiddingById(String id) {
-        return biddingRepository.findById(id);
+    public Bidding getBidding(String id) {
+        return biddingRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Bidding> getBids() {
+        return biddingRepository.findAll();
+    }
+
+    @Override
+    public List<Bidding> getBids(Product products) {
+        return biddingRepository.getAllByProduct_Id(products.getId());
     }
 
     @Override
     public List<Bidding> getCurrentBids(List<Product> products) {
-        List<Bidding> result = new ArrayList<>();
-
-        products.forEach(product -> result.addAll(
+        List<Bidding> bids = new ArrayList<>();
+        products.forEach(product -> bids.addAll(
                 product.getBids().stream()
-                        .filter(bid -> bid.getEndTime().isAfter(LocalDateTime.now()))
+                        .filter(BiddingUtils::isCurrent)
                         .collect(Collectors.toList())
         ));
+        return bids;
+    }
 
-        return result;
+    @Override
+    public List<Bidding> getCurrentBidsOfUser(UUID uuid) {
+        List<Bidding> bids = getBidsOfUser(uuid);
+        return bids.stream().filter(BiddingUtils::isCurrent)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Bidding> getFinishedBidsOfUser(UUID uuid) {
+        List<Bidding> bids = getBidsOfUser(uuid);
+        return bids.stream().filter(BiddingUtils::isFinished)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createBidding(BiddingRequest request) {
+        Product product = productService.getProduct(request.getProductId());
+        if (product != null) {
+            Bidding bidding = new Bidding();
+            bidding.setId(BiddingUtils.generateId(product));
+            bidding.setCurrentPrice(product.getPrice());
+            bidding.setEndTime(LocalDateTime.now().plusHours(request.getDuration()));
+            bidding.setExpired(false);
+            bidding.setFinished(false);
+            bidding.setProduct(product);
+            biddingRepository.save(bidding);
+        } else {
+            throw new AppException("product not found");
+        }
+    }
+
+    @Override
+    public void updateBidding(String id, BiddingRequest request) {
+        Bidding bidding = getBidding(id);
+        if (bidding != null) {
+            bidding.setCurrentPrice(request.getPrice());
+            bidding.setEndTime(bidding.getStartTime().plusHours(request.getDuration()));
+            biddingRepository.save(bidding);
+        } else {
+            throw new AppException("bidding not found");
+        }
+    }
+
+
+    @Override
+    public void updateWinner(Account account, Long money, Bidding bidding) {
+        bidding.setWinner(account);
+        bidding.setCurrentPrice(money);
+        biddingRepository.save(bidding);
+    }
+
+    private List<Bidding> getBidsOfUser(UUID uuid) {
+        Account account = accountService.getAccount(uuid);
+        List<Offer> histories = account.getOffers();
+        return histories.stream()
+                .filter(StreamUtils.distinctByKey(Offer::getBidding))
+                .map(Offer::getBidding)
+                .collect(Collectors.toList());
     }
 }

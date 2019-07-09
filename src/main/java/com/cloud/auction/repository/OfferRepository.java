@@ -1,10 +1,9 @@
 package com.cloud.auction.repository;
 
-import com.cloud.auction.model.Category;
+import com.cloud.auction.model.Offer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
-
+public interface OfferRepository extends JpaRepository<Offer, Integer> {
 }

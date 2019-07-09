@@ -1,6 +1,7 @@
 package com.cloud.auction.config;
 
 import com.cloud.auction.component.JwtAuthenticationEntryPoint;
+import com.cloud.auction.constant.RoleEnum;
 import com.cloud.auction.filter.JwtAuthenticationFilter;
 import com.cloud.auction.service.impl.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,8 +74,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/auth/**,").permitAll()
-                .antMatchers(HttpMethod.POST,"/register**,").permitAll();
+                //Swagger
+                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
+                //All
+                .antMatchers(HttpMethod.GET,"/category", "/bidding/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/login", "/register").permitAll()
+                //Customer
+                .antMatchers(HttpMethod.GET,"/user").hasRole(RoleEnum.CUSTOMER.getName())
+                .antMatchers(HttpMethod.POST,"/offer").hasRole(RoleEnum.CUSTOMER.getName())
+                //Administrator
+                .antMatchers(HttpMethod.GET,"/account", "/product").hasRole(RoleEnum.ADMINISTRATOR.getName())
+                .antMatchers(HttpMethod.POST,"/category", "/account", "/bidding", "/product").hasRole(RoleEnum.ADMINISTRATOR.getName())
+                .antMatchers(HttpMethod.PUT,"/category/**", "/account/**", "/bidding/**", "/product/**").hasRole(RoleEnum.ADMINISTRATOR.getName())
+                .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

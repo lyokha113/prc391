@@ -1,6 +1,7 @@
 package com.cloud.auction.filter;
 
 import com.cloud.auction.component.JwtTokenProvider;
+import com.cloud.auction.model.Account;
 import com.cloud.auction.service.impl.UserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                UUID userId = tokenProvider.getUserIdFromJWT(jwt);
-
-                UserDetails userDetails = userDetailsService.loadUSerById(userId);
+                Account account = tokenProvider.getTokenValue(jwt);
+                UserDetails userDetails = userDetailsService.loadUserFromAccount(account);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
