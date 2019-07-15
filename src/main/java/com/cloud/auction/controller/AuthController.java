@@ -53,11 +53,11 @@ public class AuthController {
             String jwt = tokenProvider.generateToken(account);
             return ResponseEntity.ok(new ApiResponse<>(true, new JwtAuthenticationResponse(jwt)));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "incorrect login"));
+            return ResponseEntity.ok(new ApiResponse<>(false, "incorrect login"));
         } catch (LockedException ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "account was locked"));
+            return ResponseEntity.ok(new ApiResponse<>(false, "account was locked"));
         } catch (JsonProcessingException e) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, "json parsing error"));
+            return ResponseEntity.ok(new ApiResponse<>(false, "json parsing error"));
         }
 
     }
@@ -71,7 +71,7 @@ public class AuthController {
             return account != null ? ResponseEntity.ok(new ApiResponse<>(true, "account created")) :
                     ResponseEntity.ok(new ApiResponse<>(false, "account create failed"));
         } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, ex.getMessage()));
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
     }
 

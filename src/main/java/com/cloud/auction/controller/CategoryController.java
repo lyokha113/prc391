@@ -29,7 +29,7 @@ public class CategoryController {
             categoryService.createCategory(name);
             return ResponseEntity.ok(new ApiResponse<>(true, "created successfully"));
         } catch (AppException ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, ex.getMessage()));
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
     }
 
@@ -40,7 +40,7 @@ public class CategoryController {
             categoryService.updateCategory(id, name);
             return ResponseEntity.ok(new ApiResponse<>(true, "updated successfully"));
         } catch (AppException ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, ex.getMessage()));
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
     }
 }

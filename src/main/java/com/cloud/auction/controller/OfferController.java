@@ -34,6 +34,6 @@ public class OfferController {
             offerService.bid(account, offerRequest);
             return ResponseEntity.ok(new ApiResponse<>(true, "bid successfully"));
         }
-        return ResponseEntity.badRequest().body(new ApiResponse<>(false, "bid failed"));
+        return ResponseEntity.ok(new ApiResponse<>(false, "bid failed"));
     }
 }

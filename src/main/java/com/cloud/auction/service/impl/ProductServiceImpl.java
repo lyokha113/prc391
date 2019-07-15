@@ -56,11 +56,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void createProduct(ProductRequest request) {
         Product product = new Product();
-        product.setDescription(request.getDescription());
-        product.setName(request.getName());
-        product.setPrice(request.getPrice());
-        product.setActive(request.isActive());
-        productRepository.save(product);
+//        product.setDescription(request.getDescription());
+//        product.setName(request.getName());
+//        product.setPrice(request.getPrice());
+//        product.setActive(request.isActive());
+//        productRepository.save(product);
         firebaseService.uploadImages("/p" + request.getId(), request.getImages());
     }
 }

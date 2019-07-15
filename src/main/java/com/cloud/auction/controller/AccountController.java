@@ -47,7 +47,7 @@ public class AccountController {
             return account != null ? ResponseEntity.ok(new ApiResponse<>(true, "account created")) :
                     ResponseEntity.ok(new ApiResponse<>(false, "account create failed"));
         } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, ex.getMessage()));
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
     }
 
@@ -58,7 +58,7 @@ public class AccountController {
             accountService.updateAccount(uuid, request);
             return ResponseEntity.ok(new ApiResponse<>(true, "updated successfully"));
         } catch (AppException ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, ex.getMessage()));
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
     }
 

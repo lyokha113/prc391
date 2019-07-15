@@ -39,7 +39,7 @@ public class ProductController {
             productService.updateProduct(id, request);
             return ResponseEntity.ok(new ApiResponse<>(true, "updated successfully"));
         } catch (AppException ex) {
-            return ResponseEntity.badRequest().body(new ApiResponse<>(false, ex.getMessage()));
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
     }
 
