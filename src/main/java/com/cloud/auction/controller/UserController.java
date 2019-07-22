@@ -32,6 +32,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateUser(@Valid @RequestBody AccountRequest request, Authentication auth) {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
         Account account = accountService.getAccount(userPrincipal.getId());
+        request.setRoleId(2);
         accountService.updateAccount(account.getId(), request);
         return ResponseEntity.ok(new ApiResponse<>(true, account));
     }

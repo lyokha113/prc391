@@ -30,10 +30,15 @@ public class OfferController {
     private ResponseEntity<ApiResponse> bid(@Valid @RequestBody OfferRequest offerRequest, Authentication auth) {
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
         Account account = accountService.getAccount(principal.getId());
-        if (account != null) {
-            offerService.bid(account, offerRequest);
-            return ResponseEntity.ok(new ApiResponse<>(true, "bid successfully"));
+        try {
+            if (account != null) {
+                offerService.bid(account, offerRequest);
+                return ResponseEntity.ok(new ApiResponse<>(true, "bid successfully"));
+            }
+            return ResponseEntity.ok(new ApiResponse<>(false, "bid failed"));
+        } catch (Exception ex) {
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
-        return ResponseEntity.ok(new ApiResponse<>(false, "bid failed"));
+
     }
 }

@@ -4,6 +4,7 @@ import com.cloud.auction.exception.FirebaseException;
 import com.cloud.auction.service.FirebaseService;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
+import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
@@ -15,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class FirebaseServiceImpl implements FirebaseService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FirebaseServiceImpl.class);
+    private static final String PRICE_LIST_DOCUMENT = "priceList";
     private static final String OFFERS_DOCUMENT = "offers";
     private static final String PRODUCT_IMAGES = "productImages";
 
@@ -46,7 +46,28 @@ public class FirebaseServiceImpl implements FirebaseService {
             docData.put("money", money);
             docData.put("time", Timestamp.now());
             ApiFuture<WriteResult> set = docRef.set(docData);
-            Timestamp updatedTime = set.get().getUpdateTime();
+            set.get().getUpdateTime();
+        } catch (InterruptedException | ExecutionException ex) {
+            LOGGER.error(ex.getMessage());
+            throw new FirebaseException("Insert failed. Firestore error");
+        }
+    }
+
+    @Override
+    public void createPriceList(String biddingId, Long money) {
+        try {
+            final int STEP = 50000;
+            DocumentReference docRef = firestore.collection(PRICE_LIST_DOCUMENT).document(biddingId);
+            Map<String, Object> docData = new HashMap<>();
+            List<Long> prices = new ArrayList<>();
+            for (int i = 1; i <= 20; i++) {
+                prices.add((STEP * i) + money);
+            }
+            docData.put("prices", prices);
+            docData.put("step", STEP);
+            docData.put("time", Timestamp.now());
+            ApiFuture<WriteResult> set = docRef.set(docData);
+            set.get().getUpdateTime();
         } catch (InterruptedException | ExecutionException ex) {
             LOGGER.error(ex.getMessage());
             throw new FirebaseException("Insert failed. Firestore error");
@@ -57,7 +78,7 @@ public class FirebaseServiceImpl implements FirebaseService {
     public String createImage(String path, MultipartFile image) {
         Storage storage = bucket.getStorage();
         try {
-            BlobId blobId = BlobId.of(bucket.getName(), PRODUCT_IMAGES + path + "/" + image.getName() + "." + image.getContentType());
+            BlobId blobId = BlobId.of(bucket.getName(), PRODUCT_IMAGES + path + "/" + image.getOriginalFilename());
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
                     .setContentType(image.getContentType())
                     .build();
@@ -71,10 +92,10 @@ public class FirebaseServiceImpl implements FirebaseService {
     }
 
     @Override
-    public boolean deleteImage(String path, String fileName) {
+    public boolean deleteImage(String path, MultipartFile image) {
         Storage storage = bucket.getStorage();
         try {
-            BlobId blobId = BlobId.of(bucket.getName(), PRODUCT_IMAGES + path + "/" + fileName);
+            BlobId blobId = BlobId.of(bucket.getName(), PRODUCT_IMAGES + path + "/" + image.getOriginalFilename());
             return storage.delete(blobId);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());

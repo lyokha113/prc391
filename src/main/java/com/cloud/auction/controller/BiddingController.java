@@ -81,8 +81,8 @@ public class BiddingController {
 
     @PostMapping("/bidding")
     private ResponseEntity<ApiResponse> createBidding(@Valid @RequestBody BiddingRequest request) {
-        biddingService.createBidding(request);
-        return ResponseEntity.ok(new ApiResponse<>(true, "created successfully"));
+        Bidding bidding = biddingService.createBidding(request);
+        return ResponseEntity.ok(new ApiResponse<>(true, bidding));
     }
 
 

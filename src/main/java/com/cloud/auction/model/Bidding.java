@@ -47,7 +47,6 @@ public class Bidding {
     @ManyToOne
     private Account winner;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "bidding", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Offer> offers;
 

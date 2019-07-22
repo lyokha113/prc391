@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,6 +27,7 @@ public class Offer {
     @NotNull
     private Account account;
 
+    @JsonIgnore
     @ManyToOne
     @NotNull
     private Bidding bidding;
@@ -35,7 +37,6 @@ public class Offer {
     private Long price;
 
     @Column(columnDefinition = "timestamp default current_timestamp")
-    @NotNull
     private LocalDateTime date;
 
     @Column

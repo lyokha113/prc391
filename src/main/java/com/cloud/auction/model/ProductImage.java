@@ -23,7 +23,7 @@ public class ProductImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(columnDefinition = "longtext")
     @NotBlank
     private String image;
 

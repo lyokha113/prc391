@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ProductImageService {
 
-    List<ProductImage> createImages(List<ProductImage> images);
+    ProductImage createImage(Integer id, String file);
+    void deleteImage(Integer id);
 
 }
