@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/category", "/bidding/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/login", "/register").permitAll()
                 //Customer
-                .antMatchers(HttpMethod.GET,"/user").hasRole(RoleEnum.CUSTOMER.getName())
+                .antMatchers("/user").hasRole(RoleEnum.CUSTOMER.getName())
                 .antMatchers(HttpMethod.POST,"/offer").hasRole(RoleEnum.CUSTOMER.getName())
                 //Administrator
                 .antMatchers(HttpMethod.GET,"/account", "/product", "/admin/**").hasRole(RoleEnum.ADMINISTRATOR.getName())
