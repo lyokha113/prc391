@@ -21,8 +21,19 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class FirebaseConfig {
 
-    private static final String BUCKET_URL = "t-door-243518.appspot.com";
-    private static String config = "{  \"type\": \"service_account\",  \"project_id\": \"t-door-243518\",  \"private_key_id\": \"5d8401394c994c4c830dba41739fdc324be9faf0\",  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDT7bopXceDJ0Q8\\nkrYXhM86cGV8msZUpGuMBjwNOUnqaI9CWTLwy9KfLQLPR8Msd5PSy6Zuq1fGNP+x\\nqEPwEpb19/DyEfdzilv9SMWsdnC0fLo49OH0tYbYgv2orojg/uMyQSe92gX3F3Lt\\n0RurIafVTcXGLcTG8EsAmG+YYDgr8wGupr3i7tcADtXmENvrMM3Es/Kl1R6Z0zQy\\ndHS0115YzUkC4zAJH4kuIOTlk2h1QUludXwglR/TM2JjJ3lbuE45JTSC2ou9vKDW\\nknaYeImQ9+2bYxMOuLWfp0pWLIYqTQ/UHLYG3PBko8wXZASayhKUlIbldHO5nZQn\\nN6SbhEbnAgMBAAECggEAAULV2wPHV+7aYiqOkE7VvqeWa8YJnuXXqnb/ILiKVdgn\\ne8sKU2Sh9M/nfkG+CcnqLa0OB4zkLZrUs7oM3H1yfsGUolfugIWf/CxaqPYhp4Ju\\nx3BRmhSUQcQWuwkQLKQYZwC/cQGyVQ6e+SVZ8gL2CxBYJg2IGN7cFUyoPw4WwiWD\\nktCl3Q1LSlpB+RuOgYiyTPZX5GL+x+B5J/+TxniEWh+vTLzFznx8dxFnRkwfA98u\\nlOxHYg+d/AscOkfEdIqwEI+7rtlHZT3UHlWrmug21taWb6vqNug1hydUEC8KnWHp\\nr9hoRQqSkOr7fvfKKXzOgy6gGgzKNdQFjNuN5XbW/QKBgQDrWex5UnBjYIyprKCG\\nm82+y/X9YundfnL5lvpBvTlK05TI9wlR09dMVBdxeBpOOHCwtnVZ7M0hIhSBC09Q\\nNWwL49j5p/+sNZ5rvnSmaCIBID1guw2MNocIYcHfMlG6qQ+DS8K5VIP+7WnHWra4\\nRWYqDAq9tIsedr+EQOf0t+O0NQKBgQDmhbjmd5IHom5P9toifDCKz76RxIBMncO8\\n0mtD1N5CTTnxAcDo3pxHlcY0ntZ5CWd4T9drnGwj3Q5ihFB2+HCnS1FqMMv9VwS6\\nnx/Wd9J4vrDuBGFa6qv1tp79NTqQ1W98x78dRYbzBPTxz4rHzHZ1/XfEFw2EXrVF\\nIr7Z5806KwKBgCrq4AuTs/j7T0tVtoQ1f0RuzzHgysLgXzkShhpc1kjF4pjvK5zn\\nY5iAsTG49BsVgb9H1oiKfTGwlEqf9FutEkHsz9FfCGmv8W62cXEzBhhsd6TfF25d\\nNyyZHxCDjZHbaH/J3f2L4vIm+yYmbbGWvjWmsoK7nK72eqA0cdgXfIeNAoGAB4Ux\\nRQN9lhYsdxtcfmeCxeSFGQhKDzXOXuiWaz4UiiEu1Lfz7STmAEfYkXrlEEnIQFqK\\nco5F0N2zTG94mIj+U9bXLxmsbfVayCPMzBhYm2vNJdaqvmaNeZSdlzEXWgY8ftud\\nVn0gK+lrfEADDQWUj8DXGWSPIlRcoYbCpyUywsUCgYBSgqdegFeBQ+N2sXP0xH1I\\nN9kf8PCmjU08xevkPwTI2LXwciGPaX0cpVqbRTTJ8DQE/flm4CQx/PsMO90KlhKE\\na77BcdKV2CsyWke+HAMMhZnP85wlGDnIDnTvNGelmlUmbzUGmoFI2WYMhnMdubx6\\ndWOujqrouyhe5JMgHkTauw==\\n-----END PRIVATE KEY-----\\n\",  \"client_email\": \"firebase-adminsdk-lj94a@t-door-243518.iam.gserviceaccount.com\",  \"client_id\": \"108231255983937225281\",  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",  \"token_uri\": \"https://oauth2.googleapis.com/token\",  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-lj94a%40t-door-243518.iam.gserviceaccount.com\"}";
+    private static final String BUCKET_URL = "prc391-61b27.appspot.com";
+    private static String config = "{\n" +
+            "  \"type\": \"service_account\",\n" +
+            "  \"project_id\": \"prc391-61b27\",\n" +
+            "  \"private_key_id\": \"c273f5e00f93aa0cbf2a74af8602b8a750f61293\",\n" +
+            "  \"private_key\": \"-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC0epTStVkYazjq\\n7Q8SJYWhNXaMfOEzVPHdMwjV+Gp9B403bGydA1rAushx5hznkVSDgi2r7EdUGsGt\\nOik558My8o0X/rIcT8rs4ad1jZW1fPxK01K3v152GHkzgICODFz5GWRUzc7S+VcN\\nLXcj7V13Lin/0oSk64sghYip5NenhjC+aN4meKlhLIzJnbPo4Cu+Ph6ILqXeCMQa\\nkzv25ALEfm7D93PlwpsC2hBLvHM41a30Wmol3dpiDT88saQt1EZ2/lArIbVGvVeS\\ns0CzhkXnFNR0SNkPqfGpEylh/oXnyEqI8D862EFE48CYSodjVkucUuDL0pONzCyI\\ny3O/XacjAgMBAAECggEAM6rsNC5qpUz87HSVXfKUAQTXPXz608E7xMG5g9gsVEL3\\nMKi/p2uwbYCLpd/k4n5+nW+FN7Ta7r8CN19xMfyhq1I5BmeKAgTt6UbotASmmWCA\\nscMx6RzGJDT5bb8aDpCHhWC5knWhAlETlNgxRX3MxjPXHj/cbYJpQBQ6fbjf7DtJ\\nPfPrfk8B5gXxhTSa0fYay4kqt3+bioVZtM+SB5VuplxYstnJ14kj/94AkUE/X8Z2\\nPJjbFuRaXkNt1a31+KjfQ8LZIyyX7BRfKKZQkJUO7InqfSPCRChP03VYZN/09N0h\\nAv65Y4O82FF37gras7DORiJdPNMINXIBvsJBg0NZ4QKBgQDhi6E55UgRy3DlwE1W\\nps7zD0ZzfTKSOTK6IAyppJFodEFOJiwlucz5z0OvVeMR3djIPxQLXiHPtd+kwu2q\\nOVJKLe3SrhDd4LYg+kMjfYYM9aAhBGGPKTESn1G9Pc82r0z2uQZcCPBiMu2/ni8U\\n71SxMLk+KEgLXtE9uoTf2f7R+wKBgQDM2SVxMYTbvT/76tuC9sqBORsdBVTVliRw\\nELi+tJI18lKy3sNa0NrPjVdxpOlx7uzE61jgaEjWNt1YM8x+0VkGgp2lHLYXACBU\\naJtuyx080uFoNrOxYc+7pauJ2zVsroieckm4z8InHOZPI9JbP/jz+HxO2EKcXvqd\\nzQwz0Tge+QKBgEL+AFN8AN4YOV5kshQM0+dqIBjplP3Ns32JS3mQAgiujz8xI2fJ\\nOlLw9z+7GQkThfJkmgWOXiid8uGzbHhlMkYKQluTjDr7Jd3Bt/Nws0JiKr/j1z54\\nk7TeUZ8OHuA1TXzzFCp+FTh1vBxwVbe4JsXCnSMTP+LwtOHK5vC+hWvFAoGBAMfL\\nQumUErD/dFiQSGkDq589w2QavxNSzVc/9/CIzdIv9tjezErXSZMFmDQPVGD7V5L4\\nuEanb+L+wAQ3AUzvgpUG8BsKVc85IE8zd+Yn1OxuActTDxADBklO3HAojYLi9/0S\\nGzVV7VeYqEin95NoYbgSs6ty4gUB3g3q3+vqM4KBAoGAA5FA55NYQilNiypS/OEz\\nl3qcpV9BjIFpZ5Tvyz6oTdCg9/HT5LPab5tNgVACibT52pagDFfUeLR+8Hvz0pcX\\nY4+p66IeXM0uV9BmuW/ocLvtdVIbkhsVZyJOx8wMyw5+66IXGxQMGg5+WPodBSRz\\n85Fgg4i5WhqZ0ZmqFSjfeyI=\\n-----END PRIVATE KEY-----\\n\",\n" +
+            "  \"client_email\": \"firebase-adminsdk-wq58d@prc391-61b27.iam.gserviceaccount.com\",\n" +
+            "  \"client_id\": \"115648644134191166890\",\n" +
+            "  \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n" +
+            "  \"token_uri\": \"https://oauth2.googleapis.com/token\",\n" +
+            "  \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n" +
+            "  \"client_x509_cert_url\": \"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-wq58d%40prc391-61b27.iam.gserviceaccount.com\"\n" +
+            "}\n";
 
     @Bean
     public Firestore firestore() {
@@ -36,7 +47,6 @@ public class FirebaseConfig {
 
     @PostConstruct
     public void init() throws IOException {
-//            InputStream serviceAccount = new FileInputStream("./src/gg-auth.json");
         InputStream serviceAccount = new ByteArrayInputStream(config.getBytes(StandardCharsets.UTF_8));
         GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
         FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder()

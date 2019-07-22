@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class FirebaseServiceImpl implements FirebaseService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FirebaseServiceImpl.class);
-    private static final String BIDDING_DOCUMENT = "bidding";
+    private static final String OFFERS_DOCUMENT = "offers";
     private static final String PRODUCT_IMAGES = "productImages";
 
     @Autowired
@@ -38,7 +38,7 @@ public class FirebaseServiceImpl implements FirebaseService {
     @Override
     public void insertBidding(UUID accountId, String accountName, String biddingId, Long money) {
         try {
-            DocumentReference docRef = firestore.collection(BIDDING_DOCUMENT).document();
+            DocumentReference docRef = firestore.collection(OFFERS_DOCUMENT).document();
             Map<String, Object> docData = new HashMap<>();
             docData.put("accountId", accountId.toString());
             docData.put("accountName", accountName);

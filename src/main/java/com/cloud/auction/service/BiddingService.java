@@ -16,8 +16,10 @@ public interface BiddingService {
     List<Bidding> getCurrentBids(List<Product> products);
     List<Bidding> getCurrentBidsOfUser(UUID uuid);
     List<Bidding> getFinishedBidsOfUser(UUID uuid);
-    void createBidding(BiddingRequest request);
+    Bidding createBidding(BiddingRequest request);
     void updateBidding(String id, BiddingRequest request);
+    void updateExpiredBidding(List<String> id);
+    void updateFinishedBidding(List<String> id);
     void updateWinner(Account account, Long money, Bidding bidding);
 
 }

@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user").hasRole(RoleEnum.CUSTOMER.getName())
                 .antMatchers(HttpMethod.POST,"/offer").hasRole(RoleEnum.CUSTOMER.getName())
                 //Administrator
-                .antMatchers(HttpMethod.GET,"/account", "/product").hasRole(RoleEnum.ADMINISTRATOR.getName())
+                .antMatchers(HttpMethod.GET,"/account", "/product", "/admin/**").hasRole(RoleEnum.ADMINISTRATOR.getName())
                 .antMatchers(HttpMethod.POST,"/category", "/account", "/bidding", "/product").hasRole(RoleEnum.ADMINISTRATOR.getName())
                 .antMatchers(HttpMethod.PUT,"/category/**", "/account/**", "/bidding/**", "/product/**").hasRole(RoleEnum.ADMINISTRATOR.getName())
                 .anyRequest().authenticated();

@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,32 +36,38 @@ public class BiddingController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/bidding")
+    @GetMapping("/admin/bidding")
     private ResponseEntity<ApiResponse> getBids() {
+        List<Bidding> bids = biddingService.getBids();
+        return ResponseEntity.ok(new ApiResponse<>(true, bids));
+    }
+
+    @GetMapping("/bidding")
+    private ResponseEntity<ApiResponse> getCurrentBids() {
         List<Product> products = productService.getActiveProducts();
         List<Bidding> bids = biddingService.getCurrentBids(products);
-        return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
+        return ResponseEntity.ok(new ApiResponse<>(true, bids));
     }
 
     @GetMapping("/bidding/cate/{id}")
     private ResponseEntity<ApiResponse> getAllBiddingByCategory(@PathVariable("id") Integer categoryId) {
         List<Product> products = productService.getProductsByCategory(categoryId);
         List<Bidding> bids = biddingService.getCurrentBids(products);
-        return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
+        return ResponseEntity.ok(new ApiResponse<>(true, bids));
     }
 
     @GetMapping("/bidding/user/current")
     private ResponseEntity<ApiResponse> getCurrentBidsOfUser(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         List<Bidding> bids = biddingService.getCurrentBidsOfUser(userPrincipal.getId());
-        return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
+        return ResponseEntity.ok(new ApiResponse<>(true, bids));
     }
 
     @GetMapping("/bidding/user/finished")
     private ResponseEntity<ApiResponse> getFinishedBidsOfUser(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         List<Bidding> bids = biddingService.getFinishedBidsOfUser(userPrincipal.getId());
-        return ResponseEntity.ok(new ApiResponse<>(true, bids.isEmpty() ? "empty" : bids));
+        return ResponseEntity.ok(new ApiResponse<>(true, bids));
     }
 
     @GetMapping("/bidding/{id}")
@@ -84,6 +91,18 @@ public class BiddingController {
                                                       @Valid @RequestBody BiddingRequest request) {
         try {
             biddingService.updateBidding(id, request);
+            return ResponseEntity.ok(new ApiResponse<>(true, "updated successfully"));
+        } catch (AppException ex) {
+            return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
+        }
+    }
+
+    @PutMapping("/bidding/close/{id}")
+    private ResponseEntity<ApiResponse> closeBidding(@PathVariable("id") String id) {
+        try {
+            List<String> ids = new ArrayList<>();
+            ids.add(id);
+            biddingService.updateExpiredBidding(ids);
             return ResponseEntity.ok(new ApiResponse<>(true, "updated successfully"));
         } catch (AppException ex) {
             return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));

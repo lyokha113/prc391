@@ -21,7 +21,7 @@ public class CategoryController {
     @GetMapping("/category")
     private ResponseEntity<ApiResponse> getCategories() {
         List<Category> categories = categoryService.getCategories();
-        return ResponseEntity.ok(new ApiResponse<>(true, categories.isEmpty() ? "empty" : categories));
+        return ResponseEntity.ok(new ApiResponse<>(true, categories));
     }
 
     @PostMapping("/category")

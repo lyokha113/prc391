@@ -74,7 +74,7 @@ public class BiddingServiceImpl implements BiddingService {
     }
 
     @Override
-    public void createBidding(BiddingRequest request) {
+    public Bidding createBidding(BiddingRequest request) {
         Product product = productService.getProduct(request.getProductId());
         if (product != null) {
             Bidding bidding = new Bidding();
@@ -84,7 +84,7 @@ public class BiddingServiceImpl implements BiddingService {
             bidding.setExpired(false);
             bidding.setFinished(false);
             bidding.setProduct(product);
-            biddingRepository.save(bidding);
+            return biddingRepository.save(bidding);
         } else {
             throw new AppException("product not found");
         }
@@ -94,12 +94,39 @@ public class BiddingServiceImpl implements BiddingService {
     public void updateBidding(String id, BiddingRequest request) {
         Bidding bidding = getBidding(id);
         if (bidding != null) {
-            bidding.setCurrentPrice(request.getPrice());
             bidding.setEndTime(bidding.getStartTime().plusHours(request.getDuration()));
             biddingRepository.save(bidding);
         } else {
             throw new AppException("bidding not found");
         }
+    }
+
+    @Override
+    public void updateExpiredBidding(List<String> id) {
+        List<Bidding> bids = new ArrayList<>();
+        id.forEach(i -> {
+            Bidding bidding = getBidding(i);
+            if (bidding != null) {
+                bidding.setExpired(true);
+                bidding.setFinished(false);
+                bids.add(bidding);
+            }
+        });
+        biddingRepository.saveAll(bids);
+    }
+
+    @Override
+    public void updateFinishedBidding(List<String> id) {
+        List<Bidding> bids = new ArrayList<>();
+        id.forEach(i -> {
+            Bidding bidding = getBidding(i);
+            if (bidding != null) {
+                bidding.setFinished(true);
+                bidding.setExpired(false);
+                bids.add(bidding);
+            }
+        });
+        biddingRepository.saveAll(bids);
     }
 
 

@@ -12,5 +12,4 @@ public class BiddingRequest {
 
     private Integer productId;
     private Integer duration;
-    private Long price;
 }

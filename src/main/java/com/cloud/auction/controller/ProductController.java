@@ -29,7 +29,7 @@ public class ProductController {
     @GetMapping("/product")
     private ResponseEntity<ApiResponse> getProducts() {
         List<Product> products = productService.getProducts();
-        return ResponseEntity.ok(new ApiResponse<>(true, products.isEmpty() ? "empty" : products));
+        return ResponseEntity.ok(new ApiResponse<>(true, products));
     }
 
     @PostMapping("/product")
