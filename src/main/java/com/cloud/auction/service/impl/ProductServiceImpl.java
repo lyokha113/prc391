@@ -1,13 +1,16 @@
 package com.cloud.auction.service.impl;
 
 import com.cloud.auction.exception.AppException;
+import com.cloud.auction.model.Category;
 import com.cloud.auction.model.Product;
 import com.cloud.auction.payload.ProductRequest;
 import com.cloud.auction.repository.ProductRepository;
+import com.cloud.auction.service.CategoryService;
 import com.cloud.auction.service.FirebaseService;
 import com.cloud.auction.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private FirebaseService firebaseService;
+    private CategoryService categoryService;
 
     @Override
     public Product getProduct(Integer id) {
@@ -54,13 +57,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void createProduct(ProductRequest request) {
+    public Product createProduct(ProductRequest request) {
         Product product = new Product();
-//        product.setDescription(request.getDescription());
-//        product.setName(request.getName());
-//        product.setPrice(request.getPrice());
-//        product.setActive(request.isActive());
-//        productRepository.save(product);
-        firebaseService.uploadImages("/p" + request.getId(), request.getImages());
+        product.setDescription(request.getDescription());
+        product.setName(request.getName());
+        product.setPrice(request.getPrice());
+        product.setActive(request.isActive());
+
+        Category category = categoryService.getCategory(request.getCategoryId());
+        product.setCategory(category);
+
+        return productRepository.save(product);
     }
 }

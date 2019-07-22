@@ -5,10 +5,14 @@ import com.cloud.auction.model.Bidding;
 import com.cloud.auction.model.Product;
 import com.cloud.auction.payload.ApiResponse;
 import com.cloud.auction.payload.ProductRequest;
+import com.cloud.auction.service.ProductImageService;
 import com.cloud.auction.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,6 +22,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductImageService productImageService;
 
     @GetMapping("/product")
     private ResponseEntity<ApiResponse> getProducts() {
@@ -41,6 +48,16 @@ public class ProductController {
         } catch (AppException ex) {
             return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
+    }
+
+    @PostMapping("/product/image/create")
+    private ResponseEntity<ApiResponse> createImage(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(new ApiResponse<>(true, "created successfully"));
+    }
+
+    @PostMapping("/product/image/remove")
+    private ResponseEntity<ApiResponse> removeImage(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(new ApiResponse<>(true, "created successfully"));
     }
 
 

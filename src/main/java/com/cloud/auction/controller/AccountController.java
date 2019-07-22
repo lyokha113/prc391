@@ -26,13 +26,6 @@ public class AccountController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/user")
-    public ResponseEntity<ApiResponse> getAccountDetail(Authentication auth) {
-        UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
-        Account account = accountService.getAccount(userPrincipal.getId());
-        return ResponseEntity.ok(new ApiResponse<>(true, account));
-    }
-
     @GetMapping("/account")
     public ResponseEntity<ApiResponse> getAccounts() {
         List<Account> accounts = accountService.getAccounts();
@@ -44,7 +37,7 @@ public class AccountController {
             request.setPassword(passwordEncoder.encode(request.getPassword()));
             accountService.createAccount(request);
             Account account = accountService.getAccountByEmail(request.getEmail());
-            return account != null ? ResponseEntity.ok(new ApiResponse<>(true, "account created")) :
+            return account != null ? ResponseEntity.ok(new ApiResponse<>(true, account)) :
                     ResponseEntity.ok(new ApiResponse<>(false, "account create failed"));
         } catch (Exception ex) {
             return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));

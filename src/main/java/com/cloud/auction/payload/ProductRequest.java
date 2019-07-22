@@ -13,12 +13,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductRequest {
+
     Integer id;
     String name;
     String description;
     Long price;
-    String categoryId;
+    Integer categoryId;
     boolean active;
-    List<UploadImg> images;
+
 }
 

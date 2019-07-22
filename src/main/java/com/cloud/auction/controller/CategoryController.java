@@ -3,6 +3,7 @@ package com.cloud.auction.controller;
 import com.cloud.auction.exception.AppException;
 import com.cloud.auction.model.Category;
 import com.cloud.auction.payload.ApiResponse;
+import com.cloud.auction.payload.CategoryRequest;
 import com.cloud.auction.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,10 @@ public class CategoryController {
     }
 
     @PostMapping("/category")
-    private ResponseEntity<ApiResponse> createCatagory(@Valid @RequestBody String name) {
+    private ResponseEntity<ApiResponse> createCatagory(@Valid @RequestBody CategoryRequest request) {
         try {
-            categoryService.createCategory(name);
-            return ResponseEntity.ok(new ApiResponse<>(true, "created successfully"));
+            Category category = categoryService.createCategory(request);
+            return ResponseEntity.ok(new ApiResponse<>(true, category));
         } catch (AppException ex) {
             return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));
         }
@@ -35,9 +36,9 @@ public class CategoryController {
 
     @PutMapping("/category/{id}")
     private ResponseEntity<ApiResponse> updateCategory(@PathVariable("id") Integer id,
-                                                       @RequestBody String name) {
+                                                       @RequestBody CategoryRequest request) {
         try {
-            categoryService.updateCategory(id, name);
+            categoryService.updateCategory(id, request);
             return ResponseEntity.ok(new ApiResponse<>(true, "updated successfully"));
         } catch (AppException ex) {
             return ResponseEntity.ok(new ApiResponse<>(false, ex.getMessage()));

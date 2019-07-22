@@ -62,6 +62,10 @@ public class AccountServiceImpl implements AccountService {
             Account account = result.get();
             account.setActive(request.getActive());
             account.setAddress(request.getAddress());
+
+            Role role = new Role();
+            role.setId(request.getRoleId());
+            account.setRole(role);
             accountRepository.save(account);
         } else {
             throw new AppException("account not found");

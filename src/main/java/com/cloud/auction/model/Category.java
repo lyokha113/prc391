@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,10 @@ public class Category {
     @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
+
+    @Column(columnDefinition = "TINYINT(1) default 0", nullable = false)
+    @NotNull
+    private Boolean active;
 
     @Override
     public String toString() {

@@ -2,6 +2,7 @@ package com.cloud.auction.service.impl;
 
 import com.cloud.auction.exception.AppException;
 import com.cloud.auction.model.Category;
+import com.cloud.auction.payload.CategoryRequest;
 import com.cloud.auction.repository.CategoryRepository;
 import com.cloud.auction.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,26 +27,28 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void createCategory(String name) {
+    public Category createCategory(CategoryRequest request) {
         List<Category> categories = getCategories();
         Category result = categories.stream()
-                .filter(category -> category.getName().equalsIgnoreCase(name))
+                .filter(category -> category.getName().equalsIgnoreCase(request.getName()))
                 .findAny().orElse(null);
         if (result == null) {
             Category category = new Category();
-            category.setName(name);
-            categoryRepository.save(category);
+            category.setName(request.getName());
+            category.setActive(true);
+            return categoryRepository.save(category);
         } else {
             throw new AppException("name existed");
         }
     }
 
     @Override
-    public void updateCategory(Integer id, String name) {
+    public void updateCategory(Integer id, CategoryRequest request) {
         Category category = getCategory(id);
         if (category != null) {
             try {
-                category.setName(name);
+                category.setName(request.getName());
+                category.setActive(request.isActive());
                 categoryRepository.save(category);
             } catch (Exception ex) {
                 throw new AppException("name existed");

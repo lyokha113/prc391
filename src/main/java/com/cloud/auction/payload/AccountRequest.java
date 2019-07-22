@@ -14,4 +14,5 @@ import java.util.UUID;
 public class AccountRequest {
     private String address;
     private Boolean active;
+    private int roleId;
 }

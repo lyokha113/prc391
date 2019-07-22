@@ -35,6 +35,7 @@ public class Product {
     @NonNull
     private Boolean active;
 
+    @JsonIgnore
     @ManyToOne
     @NonNull
     private Category category;
