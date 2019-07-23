@@ -5,6 +5,7 @@ import com.cloud.auction.model.Bidding;
 import com.cloud.auction.model.Product;
 import com.cloud.auction.model.ProductImage;
 import com.cloud.auction.payload.ApiResponse;
+import com.cloud.auction.payload.DeleteImageRequest;
 import com.cloud.auction.payload.ProductRequest;
 import com.cloud.auction.service.FirebaseService;
 import com.cloud.auction.service.ProductImageService;
@@ -64,11 +65,9 @@ public class ProductController {
     }
 
     @PostMapping("/product/image/remove")
-    private ResponseEntity<ApiResponse> removeImage(@RequestParam("file") MultipartFile file,
-                                                    @RequestParam("product") Integer product,
-                                                    @RequestParam("id") Integer id) {
-        firebaseService.deleteImage("/p" + product , file);
-        productImageService.deleteImage(id);
+    private ResponseEntity<ApiResponse> removeImage(@Valid @RequestBody DeleteImageRequest request) {
+        firebaseService.deleteImage("/p" + request.getProductId() , request.getFileName());
+        productImageService.deleteImage(request.getImageId());
         return ResponseEntity.ok(new ApiResponse<>(true, "deleted successfully"));
     }
 

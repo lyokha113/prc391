@@ -10,5 +10,5 @@ public interface FirebaseService {
     void insertBidding(UUID accountId, String accountName, String biddingId, Long money);
     public void createPriceList(String biddingId, Long money);
     String createImage(String path, MultipartFile image);
-    boolean deleteImage(String path, MultipartFile image);
+    boolean deleteImage(String path, String image);
 }

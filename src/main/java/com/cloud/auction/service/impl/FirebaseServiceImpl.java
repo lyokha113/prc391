@@ -92,10 +92,10 @@ public class FirebaseServiceImpl implements FirebaseService {
     }
 
     @Override
-    public boolean deleteImage(String path, MultipartFile image) {
+    public boolean deleteImage(String path, String image) {
         Storage storage = bucket.getStorage();
         try {
-            BlobId blobId = BlobId.of(bucket.getName(), PRODUCT_IMAGES + path + "/" + image.getOriginalFilename());
+            BlobId blobId = BlobId.of(bucket.getName(), PRODUCT_IMAGES + path + "/" + image);
             return storage.delete(blobId);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());

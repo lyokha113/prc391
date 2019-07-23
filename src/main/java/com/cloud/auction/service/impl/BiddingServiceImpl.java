@@ -80,6 +80,7 @@ public class BiddingServiceImpl implements BiddingService {
             Bidding bidding = new Bidding();
             bidding.setId(BiddingUtils.generateId(product));
             bidding.setCurrentPrice(product.getPrice());
+            bidding.setStartTime(LocalDateTime.now());
             bidding.setEndTime(LocalDateTime.now().plusHours(request.getDuration()));
             bidding.setExpired(false);
             bidding.setFinished(false);
